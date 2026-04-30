@@ -16,17 +16,26 @@ export interface Product {
   description: string;
   shortDescription?: string;
   packaging?: string;
-  dimensions?: string;
-  sizes?: string;
+  composition?: string;
+  featured?: boolean;
   additionalInfo?: string;
   specialCare?: string;
-  dosage?: string; // Kept for UI compatibility if needed, though not in schema
   status: "active" | "inactive";
   media: Array<{
     url: string;
     public_id: string;
     type: "image" | "video";
   }>;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface HeroImage {
+  _id: string;
+  url: string;
+  public_id: string;
+  order: number;
+  isActive: boolean;
   createdAt: string;
   updatedAt: string;
 }

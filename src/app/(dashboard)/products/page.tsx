@@ -33,11 +33,10 @@ const productFormSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   shortDescription: z.string().optional(),
   packaging: z.string().optional(),
-  dimensions: z.string().optional(),
-  sizes: z.string().optional(),
+  composition: z.string().optional(),
+  featured: z.boolean().optional(),
   additionalInfo: z.string().optional(),
   specialCare: z.string().optional(),
-  dosage: z.string().optional(),
   status: z.enum(["active", "inactive"]),
 });
 
@@ -102,11 +101,10 @@ export default function ProductsPage() {
         description: product.description,
         shortDescription: product.shortDescription,
         packaging: product.packaging,
-        dimensions: product.dimensions,
-        sizes: product.sizes,
+        composition: product.composition,
+        featured: product.featured,
         additionalInfo: product.additionalInfo,
         specialCare: product.specialCare,
-        dosage: product.dosage,
         status: product.status,
       });
     } else {
@@ -117,11 +115,10 @@ export default function ProductsPage() {
         description: "",
         shortDescription: "",
         packaging: "",
-        dimensions: "",
-        sizes: "",
+        composition: "",
+        featured: false,
         additionalInfo: "",
         specialCare: "",
-        dosage: "",
         status: "active",
       });
     }
@@ -166,7 +163,9 @@ export default function ProductsPage() {
     try {
       const formData = new FormData();
       Object.entries(data).forEach(([key, value]) => {
-        if (value !== undefined && value !== null) formData.append(key, value);
+        if (value !== undefined && value !== null) {
+          formData.append(key, typeof value === 'boolean' ? String(value) : value as string | Blob);
+        }
       });
 
       selectedFiles.forEach(file => {
@@ -302,7 +301,7 @@ export default function ProductsPage() {
                           </div>
                           <div>
                             <p className="font-bold text-surface-dark group-hover:text-brand-primary transition-colors">{p.name}</p>
-                            <p className="text-xs font-medium text-surface-dark/40">{p.dosage}</p>
+                            <p className="text-xs font-medium text-surface-dark/40">{p.composition || "No composition"}</p>
                           </div>
                        </div>
                     </td>
@@ -442,12 +441,12 @@ export default function ProductsPage() {
                                <p className="text-lg font-bold text-surface-dark">{selectedProduct?.packaging || "N/A"}</p>
                             </div>
                             <div>
-                               <p className="text-xs font-bold text-surface-dark/40 uppercase tracking-widest mb-2">Dimensions</p>
-                               <p className="text-lg font-bold text-surface-dark">{selectedProduct?.dimensions || "N/A"}</p>
+                               <p className="text-xs font-bold text-surface-dark/40 uppercase tracking-widest mb-2">Composition</p>
+                               <p className="text-lg font-bold text-surface-dark">{selectedProduct?.composition || "N/A"}</p>
                             </div>
                             <div>
-                               <p className="text-xs font-bold text-surface-dark/40 uppercase tracking-widest mb-2">Sizes</p>
-                               <p className="text-lg font-bold text-surface-dark">{selectedProduct?.sizes || "N/A"}</p>
+                               <p className="text-xs font-bold text-surface-dark/40 uppercase tracking-widest mb-2">Featured</p>
+                               <p className="text-lg font-bold text-surface-dark">{selectedProduct?.featured ? "Yes" : "No"}</p>
                             </div>
                          </div>
 
@@ -594,20 +593,23 @@ export default function ProductsPage() {
                              />
                            </div>
                            <div className="space-y-2">
-                             <label className="text-sm font-bold text-surface-dark/60 ml-1">Dimensions</label>
+                             <label className="text-sm font-bold text-surface-dark/60 ml-1">Composition</label>
                              <input 
-                               {...register("dimensions")}
+                               {...register("composition")}
                                className="w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
-                               placeholder="e.g. 12x4x6 cm" 
+                               placeholder="e.g. Paracetamol 500mg" 
                              />
                            </div>
-                           <div className="space-y-2">
-                             <label className="text-sm font-bold text-surface-dark/60 ml-1">Sizes</label>
+                           <div className="flex items-center gap-3 bg-surface-light/50 p-4 rounded-2xl border border-surface-light h-[56px] mt-8">
                              <input 
-                               {...register("sizes")}
-                               className="w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
-                               placeholder="e.g. 500mg, 650mg" 
+                               type="checkbox"
+                               {...register("featured")}
+                               className="w-5 h-5 rounded text-brand-primary focus:ring-brand-primary border-surface-light" 
                              />
+                             <div>
+                               <label className="text-sm font-bold text-surface-dark cursor-pointer">Featured Product</label>
+                               <p className="text-[10px] text-surface-dark/40 font-bold uppercase tracking-widest">Show on Homepage</p>
+                             </div>
                            </div>
                         </div>
 

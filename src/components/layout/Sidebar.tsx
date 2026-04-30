@@ -10,13 +10,15 @@ import {
   ChevronRight,
   LogOut,
   MessageSquare,
-  ClipboardList
+  ClipboardList,
+  Image as ImageIcon
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Hero Carousel", href: "/hero", icon: ImageIcon },
   { name: "Users", href: "/users", icon: Users },
   { name: "Products", href: "/products", icon: Package },
   { name: "Enquiries", href: "/enquiries", icon: ClipboardList },
