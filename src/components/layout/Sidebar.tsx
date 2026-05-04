@@ -11,7 +11,8 @@ import {
   LogOut,
   MessageSquare,
   ClipboardList,
-  Image as ImageIcon
+  Image as ImageIcon,
+  FileText
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -23,6 +24,7 @@ const navItems = [
   { name: "Products", href: "/products", icon: Package },
   { name: "Enquiries", href: "/enquiries", icon: ClipboardList },
   { name: "Reviews", href: "/reviews", icon: MessageSquare },
+  { name: "Blogs", href: "/blogs", icon: FileText },
 ];
 
 export const Sidebar: React.FC = () => {

@@ -39,3 +39,19 @@ export interface HeroImage {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface BlogPost {
+  _id: string;
+  title: string;
+  slug: string;
+  content: string;
+  author: string;
+  status: "draft" | "published";
+  tags: string[];
+  coverImage?: {
+    url: string;
+    public_id: string;
+  };
+  createdAt: string;
+  updatedAt: string;
+}
