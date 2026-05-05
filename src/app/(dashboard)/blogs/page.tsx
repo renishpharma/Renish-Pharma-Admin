@@ -106,8 +106,10 @@ export default function BlogsPage() {
       if (author) formData.append("author", author);
       formData.append("status", status);
       
-      const tagArray = tags.split(",").map(t => t.trim()).filter(Boolean);
-      if (tagArray.length > 0) formData.append("tags", JSON.stringify(tagArray));
+      // Send tags as a comma-separated string
+      if (tags) {
+        formData.append("tags", tags);
+      }
 
       if (coverImage) {
         formData.append("coverImage", coverImage);
