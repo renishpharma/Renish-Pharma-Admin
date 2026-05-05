@@ -2,6 +2,7 @@
 
 import React from "react";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { 
   LayoutDashboard, 
@@ -35,12 +36,15 @@ export const Sidebar: React.FC = () => {
     <aside className="w-72 bg-white border-r border-surface-light flex flex-col h-screen sticky top-0">
       <div className="p-8">
         <div className="flex items-center gap-3 mb-10">
-          <div className="w-10 h-10 bg-linear-to-tr from-brand-primary to-brand-secondary rounded-xl flex items-center justify-center shadow-lg shadow-brand-primary/20">
-            <span className="text-white font-bold text-xl">R</span>
-          </div>
+          <Image 
+            src="/logo/renishLogo.svg" 
+            alt="Renish Pharmaceuticals" 
+            width={40} 
+            height={40} 
+          />
           <div>
             <h2 className="font-bold text-surface-dark leading-none">Renish</h2>
-            <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest">Pharma</span>
+            <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest text-nowrap">Pharmaceuticals</span>
           </div>
         </div>
 

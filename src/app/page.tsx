@@ -75,7 +75,7 @@ export default function LoginPage() {
                 <Lock className="w-5 h-5 text-white" />
               </div>
             </motion.div>
-            <h1 className="text-3xl font-bold text-surface-dark mb-2">Renish Pharma</h1>
+            <h1 className="text-3xl font-bold text-surface-dark mb-2">Renish Pharmaceuticals</h1>
             <p className="text-surface-dark/60 font-medium">Executive Administration Portal</p>
           </div>
 

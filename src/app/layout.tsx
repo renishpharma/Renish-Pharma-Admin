@@ -4,8 +4,8 @@ import { AuthProvider } from "@/contexts/AuthContext";
 import { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Renish Pharma | Admin Dashboard",
-  description: "Executive Administrative Dashboard for Renish Pharma Management",
+  title: "Renish Pharmaceuticals | Admin Dashboard",
+  description: "Executive Administrative Dashboard for Renish Pharmaceuticals Management",
   icons: {
     icon: "/favicon_io/favicon.ico",
     shortcut: "/favicon_io/favicon-32x32.png",

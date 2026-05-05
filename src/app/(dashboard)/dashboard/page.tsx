@@ -1,25 +1,65 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { 
   Users, 
   Package, 
   TrendingUp, 
-  ShoppingBag 
+  ShoppingBag,
+  FileText,
+  Loader2
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
+import api from "@/lib/api";
 
-const stats = [
-  { name: "Total Users", value: "1,284", icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
-  { name: "Total Products", value: "452", icon: Package, iconColor: "text-cyan-600", bg: "bg-cyan-50" },
-  { name: "Active Enquiries", value: "12", icon: ShoppingBag, color: "text-orange-600", bg: "bg-orange-50" },
-  { name: "Growth Rate", value: "+12.5%", icon: TrendingUp, color: "text-green-600", bg: "bg-green-50" },
-];
+interface DashboardStats {
+  counts: {
+    products: number;
+    enquiries: number;
+    users: number;
+    blogs: number;
+  };
+  recent: {
+    enquiries: any[];
+    products: any[];
+  };
+}
 
 export default function DashboardPage() {
   const { user } = useAuth();
+  const [stats, setStats] = useState<DashboardStats | null>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchStats = async () => {
+      try {
+        const res = await api.get("/stats");
+        setStats(res.data.data);
+      } catch (error) {
+        console.error("Failed to fetch dashboard stats", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchStats();
+  }, []);
+
+  const statCards = [
+    { name: "Total Users", value: stats?.counts.users || 0, icon: Users, color: "text-blue-600", bg: "bg-blue-50" },
+    { name: "Total Products", value: stats?.counts.products || 0, icon: Package, color: "text-cyan-600", bg: "bg-cyan-50" },
+    { name: "Active Enquiries", value: stats?.counts.enquiries || 0, icon: ShoppingBag, color: "text-orange-600", bg: "bg-orange-50" },
+    { name: "Total Blogs", value: stats?.counts.blogs || 0, icon: FileText, color: "text-purple-600", bg: "bg-purple-50" },
+  ];
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center min-h-[400px]">
+        <Loader2 className="w-10 h-10 text-brand-primary animate-spin" />
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-10">
@@ -41,7 +81,7 @@ export default function DashboardPage() {
       </section>
 
       <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-        {stats.map((stat, index) => (
+        {statCards.map((stat, index) => (
           <motion.div
             key={stat.name}
             initial={{ opacity: 0, y: 20 }}
@@ -50,29 +90,33 @@ export default function DashboardPage() {
             className="bg-white p-6 rounded-3xl border border-surface-light shadow-sm hover:shadow-xl transition-all duration-300 group"
           >
             <div className={cn("w-14 h-14 rounded-2xl flex items-center justify-center mb-4 transition-transform group-hover:scale-110", stat.bg)}>
-              <stat.icon className={cn("w-7 h-7", stat.color || "text-brand-primary")} />
+              <stat.icon className={cn("w-7 h-7", stat.color)} />
             </div>
             <p className="text-surface-dark/40 font-bold text-xs uppercase tracking-widest mb-1">{stat.name}</p>
-            <p className="text-2xl font-bold text-surface-dark">{stat.value}</p>
+            <p className="text-2xl font-bold text-surface-dark">{stat.value.toLocaleString()}</p>
           </motion.div>
         ))}
       </section>
 
       <section className="grid grid-cols-1 lg:grid-cols-2 gap-10">
         <div className="bg-white p-8 rounded-3xl border border-surface-light shadow-sm">
-          <h3 className="text-xl font-bold text-surface-dark mb-6">Recent Activity</h3>
+          <h3 className="text-xl font-bold text-surface-dark mb-6">Recent Enquiries</h3>
           <div className="space-y-6">
-             {[1,2,3].map(i => (
-                <div key={i} className="flex gap-4">
-                  <div className="w-10 h-10 rounded-xl bg-surface-light flex items-center justify-center shrink-0">
-                    <Package className="w-5 h-5 text-surface-dark/40" />
+             {stats?.recent.enquiries.length === 0 ? (
+                <p className="text-surface-dark/40 text-sm font-medium">No recent enquiries found.</p>
+             ) : (
+                stats?.recent.enquiries.map((enq: any) => (
+                  <div key={enq._id} className="flex gap-4">
+                    <div className="w-10 h-10 rounded-xl bg-orange-50 flex items-center justify-center shrink-0">
+                      <ShoppingBag className="w-5 h-5 text-orange-400" />
+                    </div>
+                    <div>
+                      <p className="text-sm font-bold text-surface-dark">Enquiry from {enq.name}</p>
+                      <p className="text-xs font-medium text-surface-dark/40">{new Date(enq.createdAt).toLocaleDateString()} at {new Date(enq.createdAt).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p className="text-sm font-bold text-surface-dark">New product added: Paracetamol 500mg</p>
-                    <p className="text-xs font-medium text-surface-dark/40">2 hours ago</p>
-                  </div>
-                </div>
-             ))}
+                ))
+             )}
           </div>
         </div>
 
