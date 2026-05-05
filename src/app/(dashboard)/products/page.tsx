@@ -42,6 +42,15 @@ const productFormSchema = z.object({
 
 type ProductFormValues = z.infer<typeof productFormSchema>;
 
+const CATEGORIES = [
+  "Tablets & Capsules",
+  "Liquid Orals",
+  "Ayurvedic",
+  "Nutraceuticals",
+  "Ointment & Cream",
+  "Others"
+];
+
 export default function ProductsPage() {
   const [products, setProducts] = useState<Product[]>([]);
   const [loading, setLoading] = useState(true);
@@ -572,18 +581,22 @@ export default function ProductsPage() {
                              />
                              {errors.sku && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.sku.message}</p>}
                            </div>
-                           <div className="space-y-2">
-                             <label className="text-sm font-bold text-surface-dark/60 ml-1">Category *</label>
-                             <input 
-                               {...register("category")}
-                               className={cn(
-                                 "w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium",
-                                 errors.category ? "focus:ring-red-500/20 ring-1 ring-red-500/10" : "focus:ring-brand-primary/20"
-                               )} 
-                               placeholder="e.g. Tablets" 
-                             />
-                             {errors.category && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.category.message}</p>}
-                           </div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-bold text-surface-dark/60 ml-1">Category *</label>
+                              <select 
+                                {...register("category")}
+                                className={cn(
+                                  "w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium appearance-none",
+                                  errors.category ? "focus:ring-red-500/20 ring-1 ring-red-500/10" : "focus:ring-brand-primary/20"
+                                )} 
+                              >
+                                <option value="" disabled>Select Category</option>
+                                {CATEGORIES.map(cat => (
+                                  <option key={cat} value={cat}>{cat}</option>
+                                ))}
+                              </select>
+                              {errors.category && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.category.message}</p>}
+                            </div>
                            <div className="space-y-2">
                              <label className="text-sm font-bold text-surface-dark/60 ml-1">Packaging</label>
                              <input 

@@ -13,7 +13,8 @@ import {
   MessageSquare,
   ClipboardList,
   Image as ImageIcon,
-  FileText
+  FileText,
+  Bell
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
@@ -26,6 +27,7 @@ const navItems = [
   { name: "Enquiries", href: "/enquiries", icon: ClipboardList },
   { name: "Reviews", href: "/reviews", icon: MessageSquare },
   { name: "Blogs", href: "/blogs", icon: FileText },
+  { name: "Notifications", href: "/notifications", icon: Bell },
 ];
 
 export const Sidebar: React.FC = () => {

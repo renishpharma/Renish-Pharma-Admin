@@ -55,3 +55,13 @@ export interface BlogPost {
   createdAt: string;
   updatedAt: string;
 }
+
+export interface Notification {
+  _id: string;
+  title: string;
+  message: string;
+  type: "enquiry" | "blog" | "system";
+  link?: string;
+  read: boolean;
+  createdAt: string;
+}
