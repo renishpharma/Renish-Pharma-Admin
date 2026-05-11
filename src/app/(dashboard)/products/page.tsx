@@ -18,7 +18,6 @@ import {
   Loader2,
   Power,
   PowerOff,
-  Upload,
   ImagePlus,
   AlertCircle
 } from "lucide-react";
@@ -33,6 +32,7 @@ const productFormSchema = z.object({
   description: z.string().min(10, "Description must be at least 10 characters"),
   shortDescription: z.string().optional(),
   packaging: z.string().optional(),
+  packagingType: z.string().optional(),
   composition: z.string().optional(),
   featured: z.boolean().optional(),
   additionalInfo: z.string().optional(),
@@ -47,7 +47,6 @@ const CATEGORIES = [
   "Liquid Orals",
   "Ayurvedic",
   "Nutraceuticals",
-  "Injections",
   "Others"
 ];
 
@@ -110,6 +109,7 @@ export default function ProductsPage() {
         description: product.description,
         shortDescription: product.shortDescription,
         packaging: product.packaging,
+        packagingType: product.packagingType,
         composition: product.composition,
         featured: product.featured,
         additionalInfo: product.additionalInfo,
@@ -124,6 +124,7 @@ export default function ProductsPage() {
         description: "",
         shortDescription: "",
         packaging: "",
+        packagingType: "",
         composition: "",
         featured: false,
         additionalInfo: "",
@@ -450,6 +451,10 @@ export default function ProductsPage() {
                                <p className="text-lg font-bold text-surface-dark">{selectedProduct?.packaging || "N/A"}</p>
                             </div>
                             <div>
+                               <p className="text-xs font-bold text-surface-dark/40 uppercase tracking-widest mb-2">Packaging Type</p>
+                               <p className="text-lg font-bold text-surface-dark">{selectedProduct?.packagingType || "N/A"}</p>
+                            </div>
+                            <div>
                                <p className="text-xs font-bold text-surface-dark/40 uppercase tracking-widest mb-2">Composition</p>
                                <p className="text-lg font-bold text-surface-dark">{selectedProduct?.composition || "N/A"}</p>
                             </div>
@@ -562,7 +567,7 @@ export default function ProductsPage() {
                              <input 
                                {...register("name")}
                                className={cn(
-                                 "w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium",
+                                 "w-full bg-surface-light text-surface-dark border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium",
                                  errors.name ? "focus:ring-red-500/20 ring-1 ring-red-500/10" : "focus:ring-brand-primary/20"
                                )} 
                                placeholder="e.g. Paracetamol" 
@@ -574,7 +579,7 @@ export default function ProductsPage() {
                              <input 
                                {...register("sku")}
                                className={cn(
-                                 "w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium",
+                                 "w-full bg-surface-light border-none text-surface-dark rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium",
                                  errors.sku ? "focus:ring-red-500/20 ring-1 ring-red-500/10" : "focus:ring-brand-primary/20"
                                )} 
                                placeholder="e.g. REN-001" 
@@ -586,7 +591,7 @@ export default function ProductsPage() {
                               <select 
                                 {...register("category")}
                                 className={cn(
-                                  "w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium appearance-none",
+                                  "w-full bg-surface-light text-surface-dark border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 transition-all font-medium appearance-none",
                                   errors.category ? "focus:ring-red-500/20 ring-1 ring-red-500/10" : "focus:ring-brand-primary/20"
                                 )} 
                               >
@@ -597,23 +602,31 @@ export default function ProductsPage() {
                               </select>
                               {errors.category && <p className="text-[10px] text-red-500 font-bold ml-1 uppercase">{errors.category.message}</p>}
                             </div>
-                           <div className="space-y-2">
-                             <label className="text-sm font-bold text-surface-dark/60 ml-1">Packaging</label>
-                             <input 
-                               {...register("packaging")}
-                               className="w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
-                               placeholder="e.g. 10x10 Tablets" 
-                             />
-                           </div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-bold text-surface-dark/60 ml-1">Packaging (e.g. 10x10 Tablets)</label>
+                              <input 
+                                {...register("packaging")}
+                                className="w-full bg-surface-light text-surface-dark border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
+                                placeholder="e.g. 10x10 Tablets" 
+                              />
+                            </div>
+                            <div className="space-y-2">
+                              <label className="text-sm font-bold text-surface-dark/60 ml-1">Packaging Type (e.g. Tablets, Capsules)</label>
+                              <input 
+                                {...register("packagingType")}
+                                className="w-full bg-surface-light text-surface-dark border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
+                                placeholder="e.g. Tablets" 
+                              />
+                            </div>
                            <div className="space-y-2">
                              <label className="text-sm font-bold text-surface-dark/60 ml-1">Composition</label>
                              <input 
                                {...register("composition")}
-                               className="w-full bg-surface-light border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
+                               className="w-full bg-surface-light text-surface-dark border-none rounded-2xl py-4 px-4 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium" 
                                placeholder="e.g. Paracetamol 500mg" 
                              />
                            </div>
-                           <div className="flex items-center gap-3 bg-surface-light/50 p-4 rounded-2xl border border-surface-light h-[56px] mt-8">
+                           <div className="flex items-center gap-3 bg-surface-light/50 p-4 rounded-2xl border border-surface-light h-14 mt-8">
                              <input 
                                type="checkbox"
                                {...register("featured")}

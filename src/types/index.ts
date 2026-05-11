@@ -16,6 +16,7 @@ export interface Product {
   description: string;
   shortDescription?: string;
   packaging?: string;
+  packagingType?: string;
   composition?: string;
   featured?: boolean;
   additionalInfo?: string;
@@ -32,8 +33,18 @@ export interface Product {
 
 export interface HeroImage {
   _id: string;
-  url: string;
-  public_id: string;
+  desktop: {
+    url: string;
+    public_id: string;
+  };
+  tablet?: {
+    url: string;
+    public_id: string;
+  };
+  mobile?: {
+    url: string;
+    public_id: string;
+  };
   order: number;
   isActive: boolean;
   createdAt: string;
