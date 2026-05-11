@@ -3,8 +3,8 @@
 import React from "react";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
-import { 
-  Bell, 
+import {
+  Bell,
   LogOut,
   User as UserIcon,
   ChevronRight
@@ -28,19 +28,25 @@ export const Topbar: React.FC = () => {
     return path.charAt(0).toUpperCase() + path.slice(1);
   };
 
+  const isFetching = React.useRef(false);
+
   const fetchNotifications = React.useCallback(async () => {
+    if (isFetching.current) return;
     try {
+      isFetching.current = true;
       const response = await api.get("/notifications", { params: { limit: 5 } });
       setNotifications(response.data.data);
       setUnreadCount(response.data.unreadCount);
     } catch (error) {
       console.error("Failed to fetch notifications", error);
+    } finally {
+      isFetching.current = false;
     }
   }, []);
 
   React.useEffect(() => {
     fetchNotifications();
-    // Refresh every 30 seconds
+    // Refresh every 60 seconds to prevent overuse
     const interval = setInterval(fetchNotifications, 30000);
     return () => clearInterval(interval);
   }, [fetchNotifications]);
@@ -80,7 +86,7 @@ export const Topbar: React.FC = () => {
       <div className="flex items-center gap-6">
         {/* Notification Button */}
         <div className="relative">
-          <button 
+          <button
             onClick={() => setShowNotifications(!showNotifications)}
             className={cn(
               "relative w-12 h-12 rounded-2xl flex items-center justify-center transition-all group",
@@ -97,14 +103,14 @@ export const Topbar: React.FC = () => {
           <AnimatePresence>
             {showNotifications && (
               <>
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
                   exit={{ opacity: 0 }}
                   onClick={() => setShowNotifications(false)}
                   className="fixed inset-0 z-40"
                 />
-                <motion.div 
+                <motion.div
                   initial={{ opacity: 0, y: 10, scale: 0.95 }}
                   animate={{ opacity: 1, y: 0, scale: 1 }}
                   exit={{ opacity: 0, y: 10, scale: 0.95 }}
@@ -113,7 +119,7 @@ export const Topbar: React.FC = () => {
                   <div className="p-6 border-b border-surface-light bg-surface-light/30 flex items-center justify-between">
                     <h3 className="text-sm font-bold text-surface-dark uppercase tracking-widest">Notifications</h3>
                     {unreadCount > 0 && (
-                      <button 
+                      <button
                         onClick={handleMarkAllRead}
                         className="text-[10px] font-bold text-brand-primary uppercase tracking-widest hover:underline"
                       >
@@ -128,8 +134,8 @@ export const Topbar: React.FC = () => {
                       </div>
                     ) : (
                       notifications.map((n) => (
-                        <div 
-                          key={n._id} 
+                        <div
+                          key={n._id}
                           className={cn(
                             "p-6 hover:bg-surface-light/50 transition-colors cursor-pointer group relative",
                             !n.read && "bg-brand-primary/5"
@@ -148,8 +154,8 @@ export const Topbar: React.FC = () => {
                       ))
                     )}
                   </div>
-                  <Link 
-                    href="/notifications" 
+                  <Link
+                    href="/notifications"
                     onClick={() => setShowNotifications(false)}
                     className="p-4 bg-surface-light/30 text-center flex items-center justify-center gap-2 group hover:bg-brand-primary/5 transition-colors"
                   >
@@ -170,7 +176,7 @@ export const Topbar: React.FC = () => {
             <p className="text-[10px] font-bold text-brand-primary uppercase tracking-widest leading-none mt-1">ID: {user?.userId}</p>
           </div>
           <div className="w-12 h-12 rounded-2xl bg-linear-to-tr from-brand-primary/10 to-brand-secondary/10 flex items-center justify-center border border-brand-primary/10 overflow-hidden shadow-inner">
-             <UserIcon className="w-6 h-6 text-brand-primary" />
+            <UserIcon className="w-6 h-6 text-brand-primary" />
           </div>
         </div>
       </div>
