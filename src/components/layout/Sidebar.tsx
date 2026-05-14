@@ -40,13 +40,13 @@ export const Sidebar: React.FC = () => {
         <div className="flex items-center gap-3 mb-10">
           <Image 
             src="/logo/renishLogo.svg" 
-            alt="Renish Pharmaceuticals" 
+            alt="Renish Pharmaceutical" 
             width={40} 
             height={40} 
           />
           <div>
             <h2 className="font-bold text-surface-dark leading-none">Renish</h2>
-            <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest text-nowrap">Pharmaceuticals</span>
+            <span className="text-[10px] font-bold text-brand-primary uppercase tracking-widest text-nowrap">Pharmaceutical</span>
           </div>
         </div>
 

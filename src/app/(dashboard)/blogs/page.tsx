@@ -178,7 +178,7 @@ export default function BlogsPage() {
                    type="text" 
                    value={author}
                    onChange={e => setAuthor(e.target.value)}
-                   placeholder="Leave blank for Renish Pharmaceuticals"
+                   placeholder="Leave blank for Renish Pharmaceutical"
                    className="w-full bg-surface-light border border-surface-light rounded-2xl px-4 py-3 outline-none focus:ring-2 focus:ring-brand-primary/20 transition-all font-medium"
                  />
                </div>
